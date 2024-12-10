@@ -3,7 +3,11 @@
 import { Popover, PopoverProps } from '@mui/material'
 import React from 'react'
 
-export interface PopoverCoreProps extends Omit<PopoverProps, 'children' | 'open' | 'onClose'> {
+export interface PopoverCoreRef {
+  openToggle: (payload?: boolean) => void
+}
+
+export interface PopoverCoreProps extends Omit<PopoverProps, 'children' | 'open' | 'onClose' | 'ref'> {
   children?:
     | React.ReactNode
     | React.FC<{
@@ -18,16 +22,10 @@ export interface PopoverCoreProps extends Omit<PopoverProps, 'children' | 'open'
   disabled?: boolean
   onClose?: () => void
   onOpen?: () => void
+  ref?: React.Ref<PopoverCoreRef>
 }
 
-export interface PopoverCoreRef {
-  openToggle: (payload?: boolean) => void
-}
-
-const PopoverCore: React.ForwardRefRenderFunction<PopoverCoreRef | undefined, PopoverCoreProps> = (
-  { children, component: Component, disabled, onClose, onOpen, ...props },
-  ref
-) => {
+export default function PopoverCore({ children, component: Component, disabled, ref, onClose, onOpen, ...props }: PopoverCoreProps) {
   const [isOpen, setIsOpen] = React.useState(false)
 
   const handleOpenToggle = (payload: boolean) => {
@@ -83,5 +81,3 @@ const PopoverCore: React.ForwardRefRenderFunction<PopoverCoreRef | undefined, Po
     </>
   )
 }
-
-export default React.forwardRef(PopoverCore)

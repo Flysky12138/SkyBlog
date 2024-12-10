@@ -32,7 +32,7 @@ export default function Pi() {
 
   const [result, setResult] = React.useState<{ error: Error; pi: string; time: number } | null>(null)
   const [loading, setLoading] = React.useState(false)
-  const workerRef = React.useRef<Worker>()
+  const workerRef = React.useRef<Worker>(null)
   React.useEffect(() => {
     const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' })
     worker.onmessage = ({ data }) => {

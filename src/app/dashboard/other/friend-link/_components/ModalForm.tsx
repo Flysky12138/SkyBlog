@@ -17,7 +17,7 @@ const defaultValue: POST['body'] = {
 export default function ModalForm({ component: Component, value, onSubmit }: ModalFormProps) {
   const [form, setForm] = useImmer(value || defaultValue)
 
-  const modalRef = React.useRef<ModalCoreRef>()
+  const modalRef = React.useRef<ModalCoreRef>(null)
 
   return (
     <ModalCore ref={modalRef} className="flex flex-col gap-y-5" component={Component} onOpen={() => setForm(value || defaultValue)}>

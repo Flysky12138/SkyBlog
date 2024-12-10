@@ -3,9 +3,10 @@ import React from 'react'
 
 interface CardProps extends React.HTMLAttributes<HTMLElement> {
   component?: React.ElementType
+  ref?: React.Ref<HTMLElement>
 }
 
-const Card: React.ForwardRefRenderFunction<HTMLElement | undefined, CardProps> = ({ children, className, component: Component = 'section', ...props }, ref) => {
+export default function Card({ children, className, component: Component = 'section', ref, ...props }: CardProps) {
   return (
     <Component
       ref={ref}
@@ -16,5 +17,3 @@ const Card: React.ForwardRefRenderFunction<HTMLElement | undefined, CardProps> =
     </Component>
   )
 }
-
-export default React.forwardRef(Card)

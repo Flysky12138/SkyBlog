@@ -8,7 +8,7 @@ import { serialize } from 'next-mdx-remote/serialize'
 import { useAsync } from 'react-use'
 import { components } from './components'
 import './css'
-import { serializeOptions } from './options.mjs'
+import { serializeOptions } from './options'
 
 interface MDXClientProps {
   value: MDXRemoteProps['source']

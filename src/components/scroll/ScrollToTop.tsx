@@ -11,7 +11,7 @@ export default function ScrollToTop() {
   const [progress, setProgress] = React.useState(0)
 
   const { scrollYProgress, scrollY } = useScroll()
-  const timer = React.useRef<NodeJS.Timeout>()
+  const timer = React.useRef<NodeJS.Timeout>(undefined)
   useMotionValueEvent(scrollYProgress, 'change', value => {
     clearTimeout(timer.current)
     setProgress(value)

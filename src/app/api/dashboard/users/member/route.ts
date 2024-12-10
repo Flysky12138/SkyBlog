@@ -2,8 +2,6 @@ import prisma from '@/lib/prisma'
 import { CustomResponse } from '@/lib/server/response'
 import { Prisma } from '@prisma/client'
 
-export const dynamic = 'force-dynamic'
-
 const dbGet = async () => {
   return await prisma.user.findMany({
     orderBy: {

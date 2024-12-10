@@ -81,7 +81,7 @@ const ListItemExpand: React.FC<ListItemExpandProps> = ({ children, defaultExpand
 
   const [open, openToggle] = useToggle(typeof defaultExpanded == 'boolean' ? defaultExpanded : segment == defaultExpanded)
 
-  const boxRef = React.useRef<HTMLElement>()
+  const boxRef = React.useRef<HTMLElement>(null)
   React.useEffect(() => {
     const target = boxRef.current as HTMLElement
     target.classList.toggle('invisible', !open)

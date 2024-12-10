@@ -11,9 +11,12 @@ import { toast } from 'sonner'
 export interface ModalCopyRef {
   open: (payload: R2FileInfoType[]) => void
 }
+interface ModalCopyProps {
+  ref?: React.Ref<ModalCopyRef>
+}
 
-const ModalCopy: React.ForwardRefRenderFunction<ModalCopyRef, {}> = (props, ref) => {
-  const modalCoreRef = React.useRef<ModalCoreRef>()
+export default function ModalCopy({ ref, ...props }: ModalCopyProps) {
+  const modalCoreRef = React.useRef<ModalCoreRef>(null)
 
   const [files, setFiles] = React.useState<R2FileInfoType[]>([])
   const imageFiles = React.useMemo(() => files.filter(file => file.contentType?.startsWith('image') || (file.metadata.width && file.metadata.height)), [files])
@@ -44,8 +47,6 @@ const ModalCopy: React.ForwardRefRenderFunction<ModalCopyRef, {}> = (props, ref)
     </ModalCore>
   )
 }
-
-export default React.forwardRef(ModalCopy)
 
 const imageAttributes = (file: R2FileInfoType) =>
   file.metadata.width && file.metadata.height ? `width="${file.metadata.width}" height="${file.metadata.height}"` : ''

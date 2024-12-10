@@ -4,7 +4,7 @@ import { MDXClient } from '@/components/mdx/client'
 import ModalCore from '@/components/modal/ModalCore'
 import ModalDelete from '@/components/modal/ModalDelete'
 import PaginationTable, { PaginationSearch } from '@/components/pagination/PaginationTable'
-import Table from '@/components/table/Table'
+import { Table } from '@/components/table'
 import TableStatus from '@/components/table/TableStatus'
 import { formatISOTime } from '@/lib/parser/time'
 import { CustomRequest } from '@/lib/server/request'
@@ -36,9 +36,9 @@ export default function Page() {
     <>
       <style>{`html { scroll-padding-top: 1rem }`}</style>
       <Table>
-        <thead id={id}>
-          <tr>
-            <th className="sticky left-0 top-0 z-30 w-10 border-r text-center align-middle leading-none">
+        <Table.Header id={id}>
+          <Table.Row>
+            <Table.Head className="sticky left-0 top-0 z-30 w-10 border-r text-center align-middle leading-none">
               {!visitors || visitors.result.length == 0 ? (
                 <Checkbox disabled checked={false} />
               ) : (
@@ -50,33 +50,35 @@ export default function Page() {
                   }}
                 />
               )}
-            </th>
-            <th className="w-36 border-l">Ip</th>
-            <th className="w-60">Address</th>
-            <th className="w-44">Lon/Lat</th>
-            <th className="w-44">Device</th>
-            <th className="w-44">创建时间</th>
-            <th className="w-12 text-end">详情</th>
-          </tr>
-        </thead>
-        <tbody>
+            </Table.Head>
+            <Table.Head className="w-36 border-l">Ip</Table.Head>
+            <Table.Head className="w-60">Address</Table.Head>
+            <Table.Head className="w-44">Lon/Lat</Table.Head>
+            <Table.Head className="w-44">Device</Table.Head>
+            <Table.Head className="w-44">创建时间</Table.Head>
+            <Table.Head className="w-12 text-end">详情</Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           <TableStatus colSpan={7} isEmpty={visitors?.result.length == 0} isLoading={isLoading} />
           {visitors?.result.map(visitor => (
-            <tr key={visitor.id}>
-              <td className="s-bg-content sticky left-0 z-20 border-r text-center align-middle leading-none">
+            <Table.Row key={visitor.id}>
+              <Table.Cell className="s-bg-content sticky left-0 z-20 border-r text-center align-middle leading-none">
                 <Checkbox
                   checked={checked.has(visitor.id)}
                   onChange={() => {
                     setChecked.toggle(visitor.id)
                   }}
                 />
-              </td>
-              <td className="border-l">{visitor.ip}</td>
-              <td className="truncate">{decodeURIComponent([visitor.geo.country, visitor.geo.countryRegion, visitor.geo.city].filter(v => v).join('/'))}</td>
-              <td>{[visitor.geo.longitude, visitor.geo.latitude].filter(v => v).join('/')}</td>
-              <td>{visitor.agent.device.vendor}</td>
-              <td>{formatISOTime(visitor.createdAt)}</td>
-              <td className="text-end">
+              </Table.Cell>
+              <Table.Cell className="border-l">{visitor.ip}</Table.Cell>
+              <Table.Cell className="truncate">
+                {decodeURIComponent([visitor.geo.country, visitor.geo.countryRegion, visitor.geo.city].filter(v => v).join('/'))}
+              </Table.Cell>
+              <Table.Cell>{[visitor.geo.longitude, visitor.geo.latitude].filter(v => v).join('/')}</Table.Cell>
+              <Table.Cell>{visitor.agent.device.vendor}</Table.Cell>
+              <Table.Cell>{formatISOTime(visitor.createdAt)}</Table.Cell>
+              <Table.Cell className="text-end">
                 <ModalCore
                   className="p-0"
                   component={props => (
@@ -100,10 +102,10 @@ export default function Page() {
                     <MDXClient value={'```json expand\n' + JSON.stringify(visitor, null, ' '.repeat(2)) + '\n```'} />
                   </Box>
                 </ModalCore>
-              </td>
-            </tr>
+              </Table.Cell>
+            </Table.Row>
           ))}
-        </tbody>
+        </Table.Body>
       </Table>
       <div className="flex pt-4">
         {checked.size > 0 && (

@@ -3,11 +3,11 @@ import PostList, { getPosts } from '../_components/PostList'
 interface PageProps extends DynamicRoute<{}, { categories: string; page: string; tags: string }> {}
 
 export default async function Page({ searchParams }: PageProps) {
-  const page = Number.parseInt(searchParams.page || '1')
+  const { page, categories, tags } = await searchParams
 
-  const { categories, tags } = searchParams
+  const pageNumber = Number.parseInt(page || '1')
 
-  const posts = await getPosts(page, {
+  const posts = await getPosts(pageNumber, {
     categories: categories
       ? {
           some: {
@@ -24,5 +24,5 @@ export default async function Page({ searchParams }: PageProps) {
       : undefined
   })
 
-  return <PostList page={page} posts={posts} />
+  return <PostList page={pageNumber} posts={posts} />
 }

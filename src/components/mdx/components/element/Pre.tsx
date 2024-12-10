@@ -24,7 +24,7 @@ export default function Pre({ children, className, tabIndex, ...props }: React.C
   const preRef = React.useRef<HTMLPreElement>(null)
 
   return (
-    <pre ref={preRef} className={cn('group', className)} {...props}>
+    <pre ref={preRef} className={cn('group relative', className)} {...props}>
       {children}
       <div className="absolute right-2 top-2">
         <AnimatePresence>

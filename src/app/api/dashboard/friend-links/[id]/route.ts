@@ -24,10 +24,12 @@ export type PUT = MethodRouteType<{
 
 export const PUT = async (request: NextRequest, { params }: DynamicRoute<{ id: string }>) => {
   try {
-    if (!params.id) return CustomResponse.error('{id} 值缺失', 422)
+    const { id } = await params
+
+    if (!id) return CustomResponse.error('{id} 值缺失', 422)
 
     const data = await request.json()
-    const res = await dbPut(params.id, data)
+    const res = await dbPut(id, data)
 
     return CustomResponse.encrypt(res)
   } catch (error) {
@@ -52,9 +54,11 @@ export type PATCH = MethodRouteType<{
 export const PATCH = async (request: NextRequest, { params }: DynamicRoute<{ id: string }>) => {
   let browser: Browser | null = null
   try {
-    if (!params.id) return CustomResponse.error('{id} 值缺失', 422)
+    const { id } = await params
 
-    const friendLink = await prisma.friendLinks.findUnique({ where: { id: params.id } })
+    if (!id) return CustomResponse.error('{id} 值缺失', 422)
+
+    const friendLink = await prisma.friendLinks.findUnique({ where: { id } })
     if (!friendLink) return CustomResponse.error('未找到资源', 404)
 
     browser = await puppeteer.connect({
@@ -66,8 +70,8 @@ export const PATCH = async (request: NextRequest, { params }: DynamicRoute<{ id:
     await page.goto(friendLink.url)
     const uint8Array = await page.screenshot({ type: 'webp' })
 
-    const Key = `friend-links/${params.id}.webp/`
-    const imageSize = await getImageSize(Buffer.from(uint8Array), 'webp')
+    const Key = `friend-links/${id}.webp/`
+    const imageSize = await getImageSize(Buffer.from(uint8Array))
 
     // 保存封面
     await R2.put({
@@ -78,7 +82,7 @@ export const PATCH = async (request: NextRequest, { params }: DynamicRoute<{ id:
     })
 
     // 保存封面直链
-    const res = await dbPatch(params.id, { cover: R2.get(Key) })
+    const res = await dbPatch(id, { cover: R2.get(Key) })
 
     return CustomResponse.encrypt(res)
   } catch (error) {
@@ -101,12 +105,14 @@ export type DELETE = MethodRouteType<{
 
 export const DELETE = async (request: NextRequest, { params }: DynamicRoute<{ id: string }>) => {
   try {
-    if (!params.id) return CustomResponse.error('{id} 值缺失', 422)
+    const { id } = await params
+
+    if (!id) return CustomResponse.error('{id} 值缺失', 422)
 
     // 删除封面
-    await R2.delete([`friend-links/${params.id}.webp`])
+    await R2.delete([`friend-links/${id}.webp`])
 
-    const res = await dbDelete(params.id)
+    const res = await dbDelete(id)
 
     return CustomResponse.encrypt(res)
   } catch (error) {

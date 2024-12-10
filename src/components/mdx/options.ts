@@ -1,20 +1,19 @@
-import rehypeKatex from 'rehype-katex'
-import rehypePrettyCode from 'rehype-pretty-code'
+import { SerializeOptions } from 'next-mdx-remote/dist/types'
+import rehypeKatex, { Options as RehypeKatexOptions } from 'rehype-katex'
+import rehypePrettyCode, { Options as RehypePrettyCodeOptions } from 'rehype-pretty-code'
 import rehypeSlug from 'rehype-slug'
 import remarkDirective from 'remark-directive'
 import remarkDirectiveRehype from 'remark-directive-rehype'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
-import { rehypeCode } from './rehype/rehype-code.mjs'
+import { rehypeCode } from './rehype/rehype-code'
 
-/** @type {import("rehype-katex").Options} */
-const rehypeKatexOptions = {
+const rehypeKatexOptions: RehypeKatexOptions = {
   output: 'html',
   strict: false
 }
 
-/** @type {import('rehype-pretty-code').Options} */
-const rehypePrettyCodeOptions = {
+const rehypePrettyCodeOptions: RehypePrettyCodeOptions = {
   keepBackground: false,
   theme: {
     dark: 'dark-plus',
@@ -22,8 +21,7 @@ const rehypePrettyCodeOptions = {
   }
 }
 
-/** @type {import("next-mdx-remote/dist/types").SerializeOptions} */
-export const serializeOptions = {
+export const serializeOptions: SerializeOptions = {
   mdxOptions: {
     rehypePlugins: [[rehypeKatex, rehypeKatexOptions], [rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, rehypeCode],
     remarkPlugins: [remarkGfm, remarkMath, remarkDirective, remarkDirectiveRehype]

@@ -1,7 +1,7 @@
 'use client'
 
 import ModalDelete from '@/components/modal/ModalDelete'
-import Table from '@/components/table/Table'
+import { Table } from '@/components/table'
 import TableStatus from '@/components/table/TableStatus'
 import { cn } from '@/lib/cn'
 import { formatFileSize } from '@/lib/parser/size'
@@ -74,13 +74,13 @@ export default function Page() {
     <section>
       <Breadcrumb />
       <Table>
-        <thead>
-          <tr>
-            <th className="w-8 text-center align-middle">#</th>
-            <th className="align-middle">名称</th>
-            <th className="w-32 align-middle">大小</th>
-            <th className="w-44 align-middle">时间</th>
-            <th className="w-36 text-end align-middle">
+        <Table.Header>
+          <Table.Row>
+            <Table.Head className="w-8 text-center align-middle">#</Table.Head>
+            <Table.Head className="align-middle">名称</Table.Head>
+            <Table.Head className="w-32 align-middle">大小</Table.Head>
+            <Table.Head className="w-44 align-middle">时间</Table.Head>
+            <Table.Head className="w-36 text-end align-middle">
               <UploadFiles
                 component={props => (
                   <Button size="sm" variant="plain" {...props}>
@@ -90,41 +90,41 @@ export default function Page() {
                 path={`/${path}`}
                 onFinished={mutate}
               />
-            </th>
-          </tr>
-        </thead>
-        <tbody className={cn(['[&_tr]:cursor-pointer', 'hover:[&_tr]:bg-slate-100 hover:[&_tr]:dark:bg-[#292930]', 'hover:[&_tr]:text-sky-500'])}>
+            </Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body className={cn(['[&_tr]:cursor-pointer', 'hover:[&_tr]:bg-slate-100 hover:[&_tr]:dark:bg-[#292930]', 'hover:[&_tr]:text-sky-500'])}>
           {/* 返回上层 */}
           {slug?.length ? (
-            <tr onClick={() => router.replace(`/dashboard/r2/${slug.slice(0, -1).join('/')}`)}>
-              <td className="text-slate-500 dark:text-zinc-400">
+            <Table.Row onClick={() => router.replace(`/dashboard/r2/${slug.slice(0, -1).join('/')}`)}>
+              <Table.Cell className="text-slate-500 dark:text-zinc-400">
                 <Folder />
-              </td>
-              <td className="select-none tracking-widest" colSpan={4}>
+              </Table.Cell>
+              <Table.Cell className="select-none tracking-widest" colSpan={4}>
                 ..
-              </td>
-            </tr>
+              </Table.Cell>
+            </Table.Row>
           ) : null}
           {/* 文件夹 */}
           {data?.folders.map(it => (
-            <tr key={it} onClick={() => router.replace(`/dashboard/r2/${it}`)}>
-              <td className="text-slate-500 dark:text-zinc-400">
+            <Table.Row key={it} onClick={() => router.replace(`/dashboard/r2/${it}`)}>
+              <Table.Cell className="text-slate-500 dark:text-zinc-400">
                 <Folder />
-              </td>
-              <td>{it.split('/').at(-2)}</td>
-              <td colSpan={3}></td>
-            </tr>
+              </Table.Cell>
+              <Table.Cell>{it.split('/').at(-2)}</Table.Cell>
+              <Table.Cell colSpan={3}></Table.Cell>
+            </Table.Row>
           ))}
           {/* 文件 */}
           {data?.files.map((it, index) => (
-            <tr key={it.key} onClick={() => handleFileRowClick(it)}>
-              <td className="text-slate-500 dark:text-zinc-400">
+            <Table.Row key={it.key} onClick={() => handleFileRowClick(it)}>
+              <Table.Cell className="text-slate-500 dark:text-zinc-400">
                 <FileIcon type={it.contentType} />
-              </td>
-              <td className="truncate">{it.key.split('/').at(-1)}</td>
-              <td>{formatFileSize(it.size)}</td>
-              <td>{formatISOTime(it.lastModified)}</td>
-              <td className="flex items-center justify-end">
+              </Table.Cell>
+              <Table.Cell className="truncate">{it.key.split('/').at(-1)}</Table.Cell>
+              <Table.Cell>{formatFileSize(it.size)}</Table.Cell>
+              <Table.Cell>{formatISOTime(it.lastModified)}</Table.Cell>
+              <Table.Cell className="flex items-center justify-end">
                 <Button
                   size="sm"
                   variant="plain"
@@ -152,11 +152,11 @@ export default function Page() {
                     )
                   }}
                 />
-              </td>
-            </tr>
+              </Table.Cell>
+            </Table.Row>
           ))}
           <TableStatus colSpan={5} isEmpty={data?.folders.length == 0 && data.files.length == 0} isError={error} isLoading={isLoading} />
-        </tbody>
+        </Table.Body>
       </Table>
       <ModalCopy ref={copyLinkRef} />
     </section>

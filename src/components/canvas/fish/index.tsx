@@ -5,7 +5,7 @@ import React from 'react'
 import fish from './fish'
 
 export default function Fish() {
-  const fishRef = React.useRef<fish>()
+  const fishRef = React.useRef<fish>(null)
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
 
   React.useEffect(() => {

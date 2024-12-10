@@ -1,7 +1,7 @@
 'use client'
 
 import ModalDelete from '@/components/modal/ModalDelete'
-import Table from '@/components/table/Table'
+import { Table } from '@/components/table'
 import TableStatus from '@/components/table/TableStatus'
 import { CustomRequest } from '@/lib/server/request'
 import { Toast } from '@/lib/toast'
@@ -21,28 +21,28 @@ export default function Page() {
 
   return (
     <Table>
-      <thead>
-        <tr>
-          <th className="w-10">#</th>
-          <th className="w-52">标题</th>
-          <th className="w-80">描述</th>
-          <th className="w-40">分类</th>
-          <th className="w-40">标签</th>
-          <th className="w-16">公开</th>
-          <th className="w-44"></th>
-        </tr>
-      </thead>
-      <tbody>
+      <Table.Header>
+        <Table.Row>
+          <Table.Head className="w-10">#</Table.Head>
+          <Table.Head className="w-52">标题</Table.Head>
+          <Table.Head className="w-80">描述</Table.Head>
+          <Table.Head className="w-40">分类</Table.Head>
+          <Table.Head className="w-40">标签</Table.Head>
+          <Table.Head className="w-16">公开</Table.Head>
+          <Table.Head className="w-44"></Table.Head>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {posts.map((post, index) => (
-          <tr key={post.id}>
-            <td>{index + 1}</td>
-            <td>{post.title}</td>
-            <td>
+          <Table.Row key={post.id}>
+            <Table.Cell>{index + 1}</Table.Cell>
+            <Table.Cell>{post.title}</Table.Cell>
+            <Table.Cell>
               <p className="truncate">{post.description}</p>
-            </td>
-            <td>{post.categories.map(category => category.name).join('、')}</td>
-            <td>{post.tags.map(tag => tag.name).join('、')}</td>
-            <td className="align-bottom">
+            </Table.Cell>
+            <Table.Cell>{post.categories.map(category => category.name).join('、')}</Table.Cell>
+            <Table.Cell>{post.tags.map(tag => tag.name).join('、')}</Table.Cell>
+            <Table.Cell className="align-bottom">
               <Switch
                 checked={post.published}
                 color={post.published ? 'success' : 'warning'}
@@ -63,8 +63,8 @@ export default function Page() {
                   )
                 }}
               />
-            </td>
-            <td className="text-end">
+            </Table.Cell>
+            <Table.Cell className="text-end">
               <ModalDelete
                 component={props => (
                   <Button color="danger" size="sm" variant="plain" {...props}>
@@ -89,11 +89,11 @@ export default function Page() {
               <Button component={Link} href={`/dashboard/posts/${post.id}`} size="sm" variant="plain">
                 编辑
               </Button>
-            </td>
-          </tr>
+            </Table.Cell>
+          </Table.Row>
         ))}
         <TableStatus colSpan={7} isEmpty={posts.length == 0} isLoading={isLoading} />
-      </tbody>
+      </Table.Body>
     </Table>
   )
 }

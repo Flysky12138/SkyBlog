@@ -4,7 +4,7 @@ import { cn } from '@/lib/cn'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import Link from 'next/link'
 import rehypeSlug from 'rehype-slug'
-import { serializeOptions } from './options.mjs'
+import { serializeOptions } from './options'
 import { HEADING_ATTR, rehypeHeadingOrder } from './rehype/rehype-heading-order'
 import { remarkPickHeading } from './remark/remark-pick-heading'
 

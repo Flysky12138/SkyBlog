@@ -3,7 +3,7 @@
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote/rsc'
 import { components } from './components'
 import './css'
-import { serializeOptions } from './options.mjs'
+import { serializeOptions } from './options'
 
 interface MDXServerProps {
   value: MDXRemoteProps['source']

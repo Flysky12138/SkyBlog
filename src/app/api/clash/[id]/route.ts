@@ -37,7 +37,9 @@ const dbGet = async (id: string, data: Prisma.VisitorLogCreateInput) => {
 
 export const GET = async (request: NextRequest, { params }: DynamicRoute<{ id: string }>) => {
   try {
-    if (!params.id) return CustomResponse.error('{id} 值缺失', 422)
+    const { id } = await params
+
+    if (!id) return CustomResponse.error('{id} 值缺失', 422)
 
     const ip = process.env.NODE_ENV == 'development' ? '0.0.0.0' : ipAddress(request)
     if (!ip) return CustomResponse.error('未知访问', 400)
@@ -49,7 +51,7 @@ export const GET = async (request: NextRequest, { params }: DynamicRoute<{ id: s
     const agent = userAgent(request)
 
     const res = await dbGet(
-      params.id,
+      id,
       convertVisitorLogSaveData({
         agent,
         ip

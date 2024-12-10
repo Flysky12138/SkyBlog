@@ -91,7 +91,7 @@ export default function Page() {
   }
 
   // 左侧窗口预览
-  const { width } = useWindowSize(0)
+  const { width } = useWindowSize({ initialWidth: 0 })
   const showLeftPreview = width > 1536
   const [deferredContent, setDeferredContent] = React.useState(post.content)
 

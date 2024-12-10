@@ -1,7 +1,7 @@
 /** 动态路由类型。`T` 动态段类型，`D` 搜索参数类型 */
 type DynamicRoute<T extends Record<string, string | string[]>, D extends Record<string, string | string[] | undefined> = {}> = {
-  params: T
-  searchParams: Partial<D>
+  params: Promise<T>
+  searchParams: Promise<Partial<D>>
 }
 
 /** 文件路由请求参数、内容以及响应的类型 */

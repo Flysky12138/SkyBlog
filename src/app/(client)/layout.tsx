@@ -27,9 +27,11 @@ export default function Layout({ children }: React.PropsWithChildren) {
           <span aria-hidden="true" className="grow"></span>
           <DisplayMatchAuth role="ADMIN">
             <Tooltip title="后台">
-              <IconButton component={Link} href="/dashboard">
-                <Dashboard />
-              </IconButton>
+              <Link href="/dashboard">
+                <IconButton>
+                  <Dashboard />
+                </IconButton>
+              </Link>
             </Tooltip>
             <hr className="s-border-color-divider mx-1 h-4 rounded border" />
           </DisplayMatchAuth>

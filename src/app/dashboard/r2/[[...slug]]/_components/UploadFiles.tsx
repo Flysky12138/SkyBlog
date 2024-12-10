@@ -1,5 +1,5 @@
 import ModalCore, { ModalCoreProps } from '@/components/modal/ModalCore'
-import Table from '@/components/table/Table'
+import { Table } from '@/components/table'
 import TableStatus from '@/components/table/TableStatus'
 import { cn } from '@/lib/cn'
 import { getImageSize } from '@/lib/file/info'
@@ -123,28 +123,28 @@ export default function UploadFiles({ component: Component, path, onSubmit, onFi
         )}
       </div>
       <Table className="mt-3 max-w-screen-md">
-        <thead>
-          <tr>
-            <th>路径</th>
-            <th className="w-32">大小</th>
-            <th className="w-20 pr-5 text-end">操作</th>
-          </tr>
-        </thead>
-        <tbody>
+        <Table.Header>
+          <Table.Row>
+            <Table.Head>路径</Table.Head>
+            <Table.Head className="w-32">大小</Table.Head>
+            <Table.Head className="w-20 pr-5 text-end">操作</Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {upload.waitFileList.map((file, index) => (
-            <tr
+            <Table.Row
               key={file.webkitRelativePath || file.name}
               className={cn({
                 hidden: upload.finishedFileList.includes(file)
               })}
             >
-              <td>
+              <Table.Cell>
                 <span className="block truncate" title={file.webkitRelativePath || file.name}>
                   {file.webkitRelativePath || file.name}
                 </span>
-              </td>
-              <td>{formatFileSize(file.size)}</td>
-              <td className="text-end">
+              </Table.Cell>
+              <Table.Cell>{formatFileSize(file.size)}</Table.Cell>
+              <Table.Cell className="text-end">
                 <Button
                   color="danger"
                   disabled={isUploading}
@@ -158,11 +158,11 @@ export default function UploadFiles({ component: Component, path, onSubmit, onFi
                 >
                   删除
                 </Button>
-              </td>
-            </tr>
+              </Table.Cell>
+            </Table.Row>
           ))}
           <TableStatus colSpan={3} isEmpty={upload.waitFileList.length == 0 || isUploadFinished} isLoading={false} />
-        </tbody>
+        </Table.Body>
       </Table>
       <CopyLink ref={copyLinkRef} />
     </ModalCore>

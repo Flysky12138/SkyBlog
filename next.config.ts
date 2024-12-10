@@ -1,5 +1,6 @@
 import createMDX from '@next/mdx'
-import { serializeOptions } from './src/components/mdx/options.mjs'
+import { NextConfig } from 'next'
+import { serializeOptions } from './src/components/mdx/options'
 
 /**
  * 内容安全策略 (CSP)
@@ -22,8 +23,7 @@ const cspHeader = [
   'upgrade-insecure-requests'
 ]
 
-/** @type {import('next').NextConfig['headers']} */
-const headers = async () => [
+const headers: NextConfig['headers'] = async () => [
   {
     headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, s-maxage=2592000, immutable' }],
     source: '/live2d/:path*'
@@ -47,20 +47,18 @@ const headers = async () => [
   }
 ]
 
-/** @type {import('next').NextConfig['images']} */
-const images = {
-  remotePatterns: [{ hostname: 'raw.githubusercontent.com', protocol: 'https' }].concat(
+const images: NextConfig['images'] = {
+  remotePatterns: [{ hostname: 'raw.githubusercontent.com', protocol: 'https' as const }].concat(
     [process.env.NEXT_PUBLIC_WEBSITE_URL, process.env.NEXT_PUBLIC_R2_URL]
       .filter(it => it)
       .map(it => ({
         hostname: new URL(it).hostname,
-        protocol: new URL(it).protocol.slice(0, -1)
+        protocol: new URL(it).protocol.slice(0, -1) as 'https'
       }))
   )
 }
 
-/** @type {import('next').NextConfig['redirects']} */
-const redirects = async () => [
+const redirects: NextConfig['redirects'] = async () => [
   {
     destination: '/pages/1',
     permanent: true,
@@ -68,8 +66,7 @@ const redirects = async () => [
   }
 ]
 
-/** @type {import('next').NextConfig['rewrites']} */
-const rewrites = async () => [
+const rewrites: NextConfig['rewrites'] = async () => [
   {
     destination: 'https://avatars.githubusercontent.com/u/:path*',
     source: '/cdn/avatars.githubusercontent.com/u/:path*'
@@ -80,8 +77,7 @@ const rewrites = async () => [
   }
 ]
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   headers,
   images,
   redirects,

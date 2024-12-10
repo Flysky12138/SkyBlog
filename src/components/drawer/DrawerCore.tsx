@@ -4,7 +4,11 @@ import { Drawer, DrawerProps, Sheet } from '@mui/joy'
 import { toMerged } from 'es-toolkit'
 import React from 'react'
 
-export interface DrawerCoreProps extends Omit<DrawerProps, 'children' | 'open' | 'onClose'> {
+export interface DrawerCoreRef {
+  openToggle: (payload?: boolean) => void
+}
+
+export interface DrawerCoreProps extends Omit<DrawerProps, 'children' | 'open' | 'onClose' | 'ref'> {
   children?:
     | React.ReactNode
     | React.FC<{
@@ -19,16 +23,10 @@ export interface DrawerCoreProps extends Omit<DrawerProps, 'children' | 'open' |
   disabled?: boolean
   onClose?: () => void
   onOpen?: () => void
+  ref?: React.Ref<DrawerCoreRef>
 }
 
-export interface DrawerCoreRef {
-  openToggle: (payload?: boolean) => void
-}
-
-const DrawerCore: React.ForwardRefRenderFunction<DrawerCoreRef | undefined, DrawerCoreProps> = (
-  { children, component: Component, disabled, onClose, onOpen, className, slotProps = {}, ...props },
-  ref
-) => {
+export default function DrawerCore({ children, component: Component, disabled, onClose, onOpen, className, slotProps = {}, ref, ...props }: DrawerCoreProps) {
   const [isOpen, setIsOpen] = React.useState(false)
 
   const handleOpenToggle = (payload: boolean) => {
@@ -86,5 +84,3 @@ const DrawerCore: React.ForwardRefRenderFunction<DrawerCoreRef | undefined, Draw
     </>
   )
 }
-
-export default React.forwardRef(DrawerCore)

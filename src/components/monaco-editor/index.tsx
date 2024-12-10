@@ -51,6 +51,7 @@ export type LanguagePropsType = Required<Pick<EditorProps, 'language'>> & {
 interface MonacoEditorProps extends LanguagePropsType, Pick<EditorProps, 'loading' | 'beforeMount' | 'className' | 'height' | 'onChange' | 'options'> {
   code: EditorProps['value']
   oldCode: DiffEditorProps['original']
+  ref?: React.Ref<MonacoEditorRef>
   toolbarRender?: (params: {
     /** 分隔符 */
     Divider: typeof Divider
@@ -62,10 +63,19 @@ interface MonacoEditorProps extends LanguagePropsType, Pick<EditorProps, 'loadin
   }) => React.ReactNode
 }
 
-const MonacoEditor: React.ForwardRefRenderFunction<MonacoEditorRef, MonacoEditorProps> = (
-  { toolbarRender, className, code = '', height, oldCode = '', options = {}, onChange, beforeMount, registerEvents, ...props },
-  ref
-) => {
+export default function MonacoEditor({
+  toolbarRender,
+  className,
+  code = '',
+  height,
+  oldCode = '',
+  options = {},
+  onChange,
+  beforeMount,
+  registerEvents,
+  ref,
+  ...props
+}: MonacoEditorProps) {
   // 设置编辑器全屏高度
   const cardToolbarRef = React.useRef<HTMLDivElement>(null)
   const [zoomIn, zoomInToggle] = useToggle(false)
@@ -101,7 +111,7 @@ const MonacoEditor: React.ForwardRefRenderFunction<MonacoEditorRef, MonacoEditor
     return () => iDisposable.current.forEach(it => it.dispose())
   }, [diffMode])
 
-  const editorRef = React.useRef<MonacoEditorRef['editor']>()
+  const editorRef = React.useRef<MonacoEditorRef['editor']>(undefined)
   React.useImperativeHandle(ref, () => ({
     editor: editorRef.current
   }))
@@ -119,6 +129,7 @@ const MonacoEditor: React.ForwardRefRenderFunction<MonacoEditorRef, MonacoEditor
   return (
     <>
       <Card
+        key={2}
         ref={cardRef}
         className={cn(
           'z-50 overflow-hidden rounded-md',
@@ -186,5 +197,3 @@ const MonacoEditor: React.ForwardRefRenderFunction<MonacoEditorRef, MonacoEditor
     </>
   )
 }
-
-export default React.forwardRef(MonacoEditor)

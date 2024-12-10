@@ -1,20 +1,23 @@
 import { cn } from '@/lib/cn'
-import { Table as JoyTable, Sheet } from '@mui/joy'
+import React from 'react'
 import Card from '../layout/Card'
 
-interface TableProps {
-  children: React.ReactNode
-  className?: string
-}
+export interface TableProps extends React.ComponentProps<'table'> {}
 
-export default function Table({ children, className }: TableProps) {
+export default function Table({ children, className, ...props }: TableProps) {
   return (
-    <Card className={cn('overflow-hidden rounded-md [&_th]:s-bg-title', className)}>
-      <Sheet className="s-bg-content s-table-scrollbar h-full overflow-auto">
-        <JoyTable stickyFooter stickyHeader>
+    <Card className={cn('overflow-hidden rounded-md', className)}>
+      <div className="s-bg-content s-table-scrollbar h-full overflow-auto">
+        <table
+          className={cn([
+            'text-sm text-[--joy-palette-neutral-plainColor]',
+            'w-full table-fixed border-separate border-spacing-0',
+            '[&_*]:border-[--joy-palette-divider]'
+          ])}
+        >
           {children}
-        </JoyTable>
-      </Sheet>
+        </table>
+      </div>
     </Card>
   )
 }

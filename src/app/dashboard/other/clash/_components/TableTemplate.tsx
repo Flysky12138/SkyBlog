@@ -1,7 +1,7 @@
 'use client'
 
 import ModalDelete from '@/components/modal/ModalDelete'
-import Table from '@/components/table/Table'
+import { Table } from '@/components/table'
 import TableStatus from '@/components/table/TableStatus'
 import { SWR_KEY } from '@/lib/constants'
 import { formatISOTime } from '@/lib/parser/time'
@@ -23,14 +23,14 @@ export default function TableTemplate() {
 
   return (
     <Table>
-      <thead>
-        <tr>
-          <th className="w-10 align-middle">#</th>
-          <th className="w-40 align-middle xl:w-96">名称</th>
-          <th className="w-16 align-middle">引用</th>
-          <th className="w-44 align-middle">创建时间</th>
-          <th className="w-44 align-middle">更新时间</th>
-          <th className="w-44 text-end">
+      <Table.Header>
+        <Table.Row>
+          <Table.Head className="w-10 align-middle">#</Table.Head>
+          <Table.Head className="w-40 align-middle xl:w-96">名称</Table.Head>
+          <Table.Head className="w-16 align-middle">引用</Table.Head>
+          <Table.Head className="w-44 align-middle">创建时间</Table.Head>
+          <Table.Head className="w-44 align-middle">更新时间</Table.Head>
+          <Table.Head className="w-44 text-end">
             <ModalTemplate
               component={props => (
                 <Button color="success" size="sm" variant="plain" {...props}>
@@ -48,18 +48,18 @@ export default function TableTemplate() {
                 )
               }}
             />
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+          </Table.Head>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {clashTemplates.map((clashTemplate, index) => (
-          <tr key={clashTemplate.id}>
-            <td>{index + 1}</td>
-            <td>{clashTemplate.name}</td>
-            <td>{clashTemplate._count.clashs}</td>
-            <td>{formatISOTime(clashTemplate.createdAt)}</td>
-            <td>{formatISOTime(clashTemplate.updatedAt)}</td>
-            <td className="text-end">
+          <Table.Row key={clashTemplate.id}>
+            <Table.Cell>{index + 1}</Table.Cell>
+            <Table.Cell>{clashTemplate.name}</Table.Cell>
+            <Table.Cell>{clashTemplate._count.clashs}</Table.Cell>
+            <Table.Cell>{formatISOTime(clashTemplate.createdAt)}</Table.Cell>
+            <Table.Cell>{formatISOTime(clashTemplate.updatedAt)}</Table.Cell>
+            <Table.Cell className="text-end">
               <ModalDelete
                 component={props => (
                   <Button color="danger" size="sm" variant="plain" {...props}>
@@ -95,11 +95,11 @@ export default function TableTemplate() {
                   )
                 }}
               />
-            </td>
-          </tr>
+            </Table.Cell>
+          </Table.Row>
         ))}
         <TableStatus colSpan={6} isEmpty={clashTemplates.length == 0} isLoading={isLoading} />
-      </tbody>
+      </Table.Body>
     </Table>
   )
 }

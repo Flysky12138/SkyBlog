@@ -2,7 +2,7 @@
 
 import ModalCore from '@/components/modal/ModalCore'
 import ModalDelete from '@/components/modal/ModalDelete'
-import Table from '@/components/table/Table'
+import { Table } from '@/components/table'
 import TableStatus from '@/components/table/TableStatus'
 import { formatISOTime } from '@/lib/parser/time'
 import { CustomRequest } from '@/lib/server/request'
@@ -28,16 +28,16 @@ export default function TableClash() {
 
   return (
     <Table>
-      <thead>
-        <tr>
-          <th className="w-10 align-middle">#</th>
-          <th className="w-40 align-middle">名称</th>
-          <th className="w-40 align-middle">描述</th>
-          <th className="w-16 align-middle">次数</th>
-          <th className="w-44 align-middle">最近订阅时间</th>
-          <th className="w-44 align-middle">更新时间</th>
-          <th className="w-16 align-middle">启用</th>
-          <th className="w-44 text-end">
+      <Table.Header>
+        <Table.Row>
+          <Table.Head className="w-10 align-middle">#</Table.Head>
+          <Table.Head className="w-40 align-middle">名称</Table.Head>
+          <Table.Head className="w-40 align-middle">描述</Table.Head>
+          <Table.Head className="w-16 align-middle">次数</Table.Head>
+          <Table.Head className="w-44 align-middle">最近订阅时间</Table.Head>
+          <Table.Head className="w-44 align-middle">更新时间</Table.Head>
+          <Table.Head className="w-16 align-middle">启用</Table.Head>
+          <Table.Head className="w-44 text-end">
             <ModalClash
               component={props => (
                 <Button color="success" size="sm" variant="plain" {...props}>
@@ -55,16 +55,16 @@ export default function TableClash() {
                 )
               }}
             />
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+          </Table.Head>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {clashs.map((clash, index) => (
-          <tr key={clash.id}>
-            <td>{index + 1}</td>
-            <td>{clash.name}</td>
-            <td>{clash.subtitle}</td>
-            <td>
+          <Table.Row key={clash.id}>
+            <Table.Cell>{index + 1}</Table.Cell>
+            <Table.Cell>{clash.name}</Table.Cell>
+            <Table.Cell>{clash.subtitle}</Table.Cell>
+            <Table.Cell>
               <ModalCore
                 component={props => (
                   <Chip className="rounded" color="warning" disabled={clash.visitorInfos.length == 0} {...props}>
@@ -88,10 +88,10 @@ export default function TableClash() {
                   </div>
                 ))}
               </ModalCore>
-            </td>
-            <td>{clash.subscribeLastAt ? formatISOTime(clash.subscribeLastAt) : null}</td>
-            <td>{formatISOTime(clash.updatedAt)}</td>
-            <td>
+            </Table.Cell>
+            <Table.Cell>{clash.subscribeLastAt ? formatISOTime(clash.subscribeLastAt) : null}</Table.Cell>
+            <Table.Cell>{formatISOTime(clash.updatedAt)}</Table.Cell>
+            <Table.Cell>
               <Switch
                 checked={clash.enabled}
                 color={clash.enabled ? 'success' : 'warning'}
@@ -112,8 +112,8 @@ export default function TableClash() {
                   )
                 }}
               />
-            </td>
-            <td className="text-end">
+            </Table.Cell>
+            <Table.Cell className="text-end">
               <ModalDelete
                 component={props => (
                   <Button color="danger" size="sm" variant="plain" {...props}>
@@ -172,11 +172,11 @@ export default function TableClash() {
                   )
                 }}
               />
-            </td>
-          </tr>
+            </Table.Cell>
+          </Table.Row>
         ))}
         <TableStatus colSpan={8} isEmpty={clashs.length == 0} isLoading={isLoading} />
-      </tbody>
+      </Table.Body>
     </Table>
   )
 }

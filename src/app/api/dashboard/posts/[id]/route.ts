@@ -18,9 +18,11 @@ export type GET = MethodRouteType<{
 
 export const GET = async (request: NextRequest, { params }: DynamicRoute<{ id: string }>) => {
   try {
-    if (!params.id) return CustomResponse.error('{id} 值缺失', 422)
+    const { id } = await params
 
-    const res = await dbGet(params.id)
+    if (!id) return CustomResponse.error('{id} 值缺失', 422)
+
+    const res = await dbGet(id)
 
     return CustomResponse.encrypt(res)
   } catch (error) {
@@ -68,9 +70,12 @@ export type POST = MethodRouteType<{
 
 export const POST = async (request: NextRequest, { params }: DynamicRoute<{ id: string }>) => {
   try {
-    if (params.id != 'new') return CustomResponse.error("{id} 值不为 'new'", 422)
+    const { id } = await params
+
+    if (id != 'new') return CustomResponse.error("{id} 值不为 'new'", 422)
 
     const data = await request.json()
+
     const res = await dbPost(data)
     CacheClear.post(res.id)
 
@@ -122,11 +127,13 @@ export type PUT = MethodRouteType<{
 
 export const PUT = async (request: NextRequest, { params }: DynamicRoute<{ id: string }>) => {
   try {
-    if (!params.id) return CustomResponse.error('{id} 值缺失', 422)
+    const { id } = await params
+
+    if (!id) return CustomResponse.error('{id} 值缺失', 422)
 
     const data = await request.json()
-    const res = await dbPut(params.id, data)
-    CacheClear.post(params.id)
+    const res = await dbPut(id, data)
+    CacheClear.post(id)
 
     return CustomResponse.encrypt(res)
   } catch (error) {
@@ -149,11 +156,13 @@ export type PATCH = MethodRouteType<{
 
 export const PATCH = async (request: NextRequest, { params }: DynamicRoute<{ id: string }>) => {
   try {
-    if (!params.id) return CustomResponse.error('{id} 值缺失', 422)
+    const { id } = await params
+
+    if (!id) return CustomResponse.error('{id} 值缺失', 422)
 
     const data = await request.json()
-    const res = await dbPatch(params.id, data)
-    CacheClear.post(params.id)
+    const res = await dbPatch(id, data)
+    CacheClear.post(id)
 
     return CustomResponse.encrypt(res)
   } catch (error) {
@@ -173,10 +182,12 @@ export type DELETE = MethodRouteType<{
 
 export const DELETE = async (request: NextRequest, { params }: DynamicRoute<{ id: string }>) => {
   try {
-    if (!params.id) return CustomResponse.error('{id} 值缺失', 422)
+    const { id } = await params
 
-    const res = await dbDelete(params.id)
-    CacheClear.post(params.id)
+    if (!id) return CustomResponse.error('{id} 值缺失', 422)
+
+    const res = await dbDelete(id)
+    CacheClear.post(id)
 
     return CustomResponse.encrypt(res)
   } catch (error) {

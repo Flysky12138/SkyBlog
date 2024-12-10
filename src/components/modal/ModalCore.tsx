@@ -4,7 +4,11 @@ import { cn } from '@/lib/cn'
 import { LinearProgress, Modal, ModalDialog, ModalDialogProps, ModalOverflow, ModalProps } from '@mui/joy'
 import React from 'react'
 
-export interface ModalCoreProps extends Omit<ModalProps, 'children' | 'open' | 'onClose'> {
+export interface ModalCoreRef {
+  openToggle: (payload?: boolean) => void
+}
+
+export interface ModalCoreProps extends Omit<ModalProps, 'children' | 'open' | 'onClose' | 'ref'> {
   children?:
     | React.ReactNode
     | React.FC<{
@@ -22,16 +26,22 @@ export interface ModalCoreProps extends Omit<ModalProps, 'children' | 'open' | '
   loading?: boolean
   onClose?: () => void
   onOpen?: () => void
+  ref?: React.Ref<ModalCoreRef>
 }
 
-export interface ModalCoreRef {
-  openToggle: (payload?: boolean) => void
-}
-
-const ModalCore: React.ForwardRefRenderFunction<ModalCoreRef | undefined, ModalCoreProps> = (
-  { children, component: Component, disabled, onClose, onOpen, loading, disableBackdropClickClose, className, layout, ...props },
-  ref
-) => {
+export default function ModalCore({
+  children,
+  component: Component,
+  disabled,
+  onClose,
+  onOpen,
+  loading,
+  disableBackdropClickClose,
+  className,
+  layout,
+  ref,
+  ...props
+}: ModalCoreProps) {
   const [isOpen, setIsOpen] = React.useState(false)
 
   const handleOpenToggle = (payload: boolean) => {
@@ -51,7 +61,7 @@ const ModalCore: React.ForwardRefRenderFunction<ModalCoreRef | undefined, ModalC
   }))
 
   // 避免按键在内部按下而在外部抬起而意外关闭窗口
-  const pointerDownTarget = React.useRef<HTMLElement>()
+  const pointerDownTarget = React.useRef<HTMLElement>(null)
 
   return (
     <>
@@ -100,5 +110,3 @@ const ModalCore: React.ForwardRefRenderFunction<ModalCoreRef | undefined, ModalC
     </>
   )
 }
-
-export default React.forwardRef(ModalCore)

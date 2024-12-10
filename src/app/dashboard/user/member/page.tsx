@@ -1,6 +1,6 @@
 'use client'
 
-import Table from '@/components/table/Table'
+import { Table } from '@/components/table'
 import TableStatus from '@/components/table/TableStatus'
 import { formatISOTime } from '@/lib/parser/time'
 import { CustomRequest } from '@/lib/server/request'
@@ -13,29 +13,29 @@ export default function Page() {
 
   return (
     <Table>
-      <thead>
-        <tr>
-          <th className="w-10">#</th>
-          <th className="w-40">名字</th>
-          <th className="w-60">邮箱</th>
-          <th className="w-32">权限</th>
-          <th className="w-44">更新时间</th>
-          <th className="w-44">创建时间</th>
-        </tr>
-      </thead>
-      <tbody>
+      <Table.Header>
+        <Table.Row>
+          <Table.Head className="w-10">#</Table.Head>
+          <Table.Head className="w-40">名字</Table.Head>
+          <Table.Head className="w-60">邮箱</Table.Head>
+          <Table.Head className="w-32">权限</Table.Head>
+          <Table.Head className="w-44">更新时间</Table.Head>
+          <Table.Head className="w-44">创建时间</Table.Head>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {members.map((member, index) => (
-          <tr key={member.id}>
-            <td>{index + 1}</td>
-            <td>{member.name}</td>
-            <td>{member.email}</td>
-            <td>{member.role}</td>
-            <td>{formatISOTime(member.updatedAt)}</td>
-            <td>{formatISOTime(member.createdAt)}</td>
-          </tr>
+          <Table.Row key={member.id}>
+            <Table.Cell>{index + 1}</Table.Cell>
+            <Table.Cell>{member.name}</Table.Cell>
+            <Table.Cell>{member.email}</Table.Cell>
+            <Table.Cell>{member.role}</Table.Cell>
+            <Table.Cell>{formatISOTime(member.updatedAt)}</Table.Cell>
+            <Table.Cell>{formatISOTime(member.createdAt)}</Table.Cell>
+          </Table.Row>
         ))}
         <TableStatus colSpan={6} isEmpty={members.length == 0} isLoading={isLoading} />
-      </tbody>
+      </Table.Body>
     </Table>
   )
 }

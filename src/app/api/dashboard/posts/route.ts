@@ -3,8 +3,6 @@ import { CustomResponse } from '@/lib/server/response'
 import { Prisma } from '@prisma/client'
 import { include } from './prisma.config'
 
-export const dynamic = 'force-dynamic'
-
 const dbGet = async () => {
   return await prisma.post.findMany({
     orderBy: {

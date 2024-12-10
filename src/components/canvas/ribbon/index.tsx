@@ -4,7 +4,7 @@ import React from 'react'
 import ribbon from './ribbon'
 
 export default function Ribbon() {
-  const ribbonRef = React.useRef<ribbon>()
+  const ribbonRef = React.useRef<ribbon>(null)
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
 
   React.useEffect(() => {

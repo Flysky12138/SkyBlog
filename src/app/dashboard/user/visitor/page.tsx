@@ -1,6 +1,5 @@
 'use client'
 
-import { MDXClient } from '@/components/mdx/client'
 import ModalCore from '@/components/modal/ModalCore'
 import ModalDelete from '@/components/modal/ModalDelete'
 import PaginationTable, { PaginationSearch } from '@/components/pagination/PaginationTable'
@@ -11,10 +10,13 @@ import { CustomRequest } from '@/lib/server/request'
 import { Toast } from '@/lib/toast'
 import { MoreHoriz } from '@mui/icons-material'
 import { Box, Button, Checkbox, IconButton } from '@mui/joy'
+import dynamic from 'next/dynamic'
 import React from 'react'
 import { useSet } from 'react-use'
 import useSWR from 'swr'
 import { useImmer } from 'use-immer'
+
+const MDXClient = dynamic(() => import('@/components/mdx/client').then(it => it.MDXClient), { ssr: false })
 
 export default function Page() {
   const [search, setSearch] = useImmer<PaginationSearch>({ limit: 20, page: 1 })

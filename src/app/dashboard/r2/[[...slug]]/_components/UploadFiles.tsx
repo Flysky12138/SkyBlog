@@ -6,7 +6,7 @@ import { getImageSize } from '@/lib/file/info'
 import { convertObjectValues } from '@/lib/parser/object'
 import { formatFileSize } from '@/lib/parser/size'
 import { promisePool } from '@/lib/promise'
-import { R2, R2FileInfoType } from '@/lib/server/r2'
+import { R2 } from '@/lib/server/r2'
 import { Toast } from '@/lib/toast'
 import { FileOpenOutlined, FileUploadOutlined, FolderOpenOutlined } from '@mui/icons-material'
 import { Button, ButtonGroup, Input } from '@mui/joy'
@@ -17,14 +17,14 @@ import CopyLink, { ModalCopyRef } from './ModalCopy'
 
 interface UploadFilesProps extends Pick<ModalCoreProps, 'component'> {
   onFinished?: () => void
-  onSubmit?: (payload: R2FileInfoType) => void
+  onSubmit?: (payload: R2.FileInfo) => void
   path: StartsWith<'/'>
 }
 
 export default function UploadFiles({ component: Component, path, onSubmit, onFinished }: UploadFilesProps) {
   const [upload, setUpload] = useImmer<{
     finishedFileList: File[]
-    finishedReturnData: R2FileInfoType[]
+    finishedReturnData: R2.FileInfo[]
     waitFileList: File[]
   }>({ finishedFileList: [], finishedReturnData: [], waitFileList: [] })
 

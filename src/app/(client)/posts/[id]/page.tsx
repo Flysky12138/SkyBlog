@@ -53,8 +53,10 @@ export default async function Page({ params }: PageProps) {
         <Card className="relative flex flex-col gap-y-2 p-5">
           <DisplayMatchAuth role="ADMIN">
             <Tooltip title="编辑">
-              <IconButton className="absolute right-5 top-5" component={Link} href={`/dashboard/posts/${post.id}`} target="_blank" variant="plain">
-                <Edit />
+              <IconButton className="absolute right-5 top-5" variant="plain">
+                <Link href={`/dashboard/posts/${post.id}`} target="_blank">
+                  <Edit />
+                </Link>
               </IconButton>
             </Tooltip>
           </DisplayMatchAuth>

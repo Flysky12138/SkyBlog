@@ -7,8 +7,6 @@ import { NextRequest, NextResponse, userAgent } from 'next/server'
 import { convertClashGetData } from '../../dashboard/clash/utils'
 import { convertVisitorLogSaveData } from '../../dashboard/users/visitor/utils'
 
-export const runtime = 'nodejs'
-
 const dbGet = async (id: string, data: Prisma.VisitorLogCreateInput) => {
   const subscribeLastAt = new Date().toISOString()
 
@@ -50,13 +48,7 @@ export const GET = async (request: NextRequest, { params }: DynamicRoute<{ id: s
 
     const agent = userAgent(request)
 
-    const res = await dbGet(
-      id,
-      convertVisitorLogSaveData({
-        agent,
-        ip
-      })
-    )
+    const res = await dbGet(id, convertVisitorLogSaveData({ agent, ip }))
 
     const yaml = res.clashTemplateId ? replaceTextWithObjectValues(res.clashTemplates?.content, res.variables) : res.content
 

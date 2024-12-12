@@ -109,7 +109,7 @@ export default function Page() {
 
   return (
     <section className="flex h-screen">
-      <style>{`main{ padding: 0 !important }`}</style>
+      <style>{`main { padding: 0 !important }`}</style>
       {showLeftPreview && (
         <article className="s-border-color-divider w-[calc(100%-1024px)] max-w-none overflow-y-scroll border-r">
           <MDXClient value={deferredContent || ''} />

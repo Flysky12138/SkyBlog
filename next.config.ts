@@ -9,18 +9,14 @@ import { serializeOptions } from './src/components/mdx/options'
 const cspSrc = [process.env.NEXT_PUBLIC_R2_URL, process.env.NEXT_PUBLIC_S3_API.replace('//', `//${process.env.NEXT_PUBLIC_R2_BUCKET_NAME}.`)].join(' ')
 const cspHeader = [
   "default-src 'self'",
-  `connect-src 'self' blob: data: ${cspSrc}`,
-  "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
-  "style-src 'self' 'unsafe-inline'",
   `img-src 'self' blob: data: ${cspSrc}`,
-  "media-src 'self'",
-  "font-src 'self'",
+  `connect-src 'self' blob: data: ${cspSrc}`,
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  "style-src 'self' 'unsafe-inline'",
+  'worker-src blob:',
   "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
   "frame-ancestors 'none'",
-  'block-all-mixed-content',
-  'upgrade-insecure-requests'
+  'block-all-mixed-content'
 ]
 
 const headers: NextConfig['headers'] = async () => [

@@ -1,7 +1,7 @@
 'use client'
 
 import { DefaultPostType, MessageEventDataMountedType, MessageEventDataRefreshType } from '@/app/dashboard/posts/[id]/page'
-import Card from '@/components/layout/Card'
+import { Card } from '@/components/layout/card'
 import { MDXClient } from '@/components/mdx/client'
 import React from 'react'
 import { useEvent, useMount } from 'react-use'

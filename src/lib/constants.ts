@@ -29,7 +29,7 @@ export const SESSIONSTORAGE = {
 
 /** `useSwr` cahce key，页面间共享数据时使用 */
 export const SWR_KEY = {
-  CLASH_TEMPLATES: '01930ee7-da43-7eac-b940-98f1627d2f3f'
+  CLASH_TEMPLATES: '5139cbc3-691c-54b6-8657-5a02ae60f58f'
 } as const
 
 /** css `view-transition-name` */

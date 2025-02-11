@@ -3,7 +3,11 @@ const eslintRules = {
   // 使用函数表达式而不是函数声明
   'func-style': ['error', 'expression'],
   // import 之间不允许有空行，之后必须有空行
-  'padding-line-between-statements': ['error', { blankLine: 'always', next: '*', prev: 'import' }, { blankLine: 'never', next: 'import', prev: 'import' }],
+  'padding-line-between-statements': [
+    'error',
+    { blankLine: 'always', next: '*', prev: 'import' },
+    { blankLine: 'never', next: 'import', prev: 'import' }
+  ],
   // 要求使用箭头函数进行回调
   'prefer-arrow-callback': 'error',
   // 优先使用 const

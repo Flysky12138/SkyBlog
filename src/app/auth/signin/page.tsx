@@ -1,11 +1,11 @@
-import Card from '@/components/layout/Card'
+import { Card } from '@/components/layout/card'
 import { auth } from '@/lib/auth'
 import { GitHub } from '@mui/icons-material'
 import { Avatar, Button } from '@mui/joy'
 import Image from 'next/image'
 import Link from 'next/link'
-import ButtonOAuthSignIn from './_components/ButtonOAuthSignIn'
-import LinkTo from './_components/LinkTo'
+import { ButtonOAuthSignIn } from './_components/button-oauth-signin'
+import { LinkTo } from './_components/link-to'
 
 export default async function Page() {
   const session = await auth()

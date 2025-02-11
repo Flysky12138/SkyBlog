@@ -1,4 +1,4 @@
-import Toaster from '@/components/Toaster'
+import { Toaster } from '@/components/toaster'
 import '@/globals.css'
 import { ImageViewerProvider } from '@/provider/image-viewer'
 import { SWRProvider } from '@/provider/swr'

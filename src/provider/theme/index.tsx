@@ -1,6 +1,6 @@
 'use client'
 
-import DisplayMatchEnv from '@/components/display/DisplayMatchEnv'
+import { DisplayMatchEnv } from '@/components/display/display-match-env'
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/react'
 import JoyInitColorSchemeScript from '@mui/joy/InitColorSchemeScript'

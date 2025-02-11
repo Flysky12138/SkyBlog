@@ -1,6 +1,6 @@
 'use client'
 
-import CustomError from '@/components/CustomError'
+import { CustomError } from '@/components/custom-error'
 
 export default function GlobalError(props: ErrorRouteProps) {
   return (

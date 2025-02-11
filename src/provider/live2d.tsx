@@ -1,6 +1,6 @@
 'use client'
 
-import Breakpoint from '@/components/layout/Breakpoint'
+import { Breakpoint } from '@/components/layout/breakpoint'
 import { CustomRequest } from '@/lib/server/request'
 import React from 'react'
 import { useAsync, useInterval, useLocalStorage } from 'react-use'

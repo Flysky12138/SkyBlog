@@ -69,7 +69,11 @@ export const markdownConfig: LanguagePropsType = {
         })
         if (/^\s*$/.test(textUntilPosition)) {
           return suggestField([
-            { detail: '选项卡', key: 'tab', value: ['::::tabs', ':::tab{label="$1"}', '$2', ':::', ':::tab{label="$3"}', '$4', ':::', '::::'] },
+            {
+              detail: '选项卡',
+              key: 'tab',
+              value: ['::::tabs', ':::tab{label="$1"}', '$2', ':::', ':::tab{label="$3"}', '$4', ':::', '::::']
+            },
             { detail: '分割线', key: 'hr', value: ['::hr[$1]'] },
             { detail: 'MDX 页面', key: 'mdx', value: ['::mdx{path=$0}'] },
             { detail: '瀑布流布局', key: 'masonry', value: ['::::masonry', '$1', '::::'] },
@@ -77,9 +81,24 @@ export const markdownConfig: LanguagePropsType = {
             {
               detail: '手风琴',
               key: 'accordion-group',
-              value: [':::::accordion-group', '::::accordion', ':::accordion-summary', '$1', ':::', ':::accordion-details', '$2', ':::', '::::', ':::::']
+              value: [
+                ':::::accordion-group',
+                '::::accordion',
+                ':::accordion-summary',
+                '$1',
+                ':::',
+                ':::accordion-details',
+                '$2',
+                ':::',
+                '::::',
+                ':::::'
+              ]
             },
-            { detail: '手风琴', key: 'accordion', value: ['::::accordion', ':::accordion-summary', '$1', ':::', ':::accordion-details', '$2', ':::', '::::'] }
+            {
+              detail: '手风琴',
+              key: 'accordion',
+              value: ['::::accordion', ':::accordion-summary', '$1', ':::', ':::accordion-details', '$2', ':::', '::::']
+            }
           ])
         }
 

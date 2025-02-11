@@ -1,4 +1,4 @@
-import Card from '@/components/layout/Card'
+import { Card } from '@/components/layout/card'
 
 export default function Loading() {
   return (

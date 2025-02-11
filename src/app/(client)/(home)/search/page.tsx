@@ -1,4 +1,4 @@
-import PostList, { getPosts } from '../_components/PostList'
+import { PostList, getPosts } from '../_components/post/post-list'
 
 interface PageProps extends DynamicRoute<{}, { categories: string; page: string; tags: string }> {}
 
@@ -7,7 +7,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   const pageNumber = Number.parseInt(page || '1')
 
-  const posts = await getPosts(pageNumber, {
+  const { result: posts, ...pagination } = await getPosts(pageNumber, {
     categories: categories
       ? {
           some: {
@@ -24,5 +24,5 @@ export default async function Page({ searchParams }: PageProps) {
       : undefined
   })
 
-  return <PostList page={pageNumber} posts={posts} />
+  return <PostList posts={posts} {...pagination} />
 }

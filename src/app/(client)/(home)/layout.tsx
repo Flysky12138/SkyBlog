@@ -1,11 +1,11 @@
-import Card from '@/components/layout/Card'
+import { Card } from '@/components/layout/card'
 import dynamic from 'next/dynamic'
 import React from 'react'
-import CardDeveloper from './_components/card/CardDeveloper'
-import CardFriendLink from './_components/card/CardFriendLink'
-import CardGuestInfo from './_components/card/CardGuestInfo'
+import { CardDeveloper } from './_components/card/card-developer'
+import { CardFriendLink } from './_components/card/card-friend-link'
+import { CardGuestInfo } from './_components/card/card-guest-info'
 
-const CardReactUwU = dynamic(() => import('./_components/card/CardReactUwU'))
+const CardReactUwU = dynamic(() => import('./_components/card/card-react-uwu').then(it => it.CardReactUwU))
 
 export default function Layout({ children }: React.PropsWithChildren) {
   return (

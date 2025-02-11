@@ -1,17 +1,17 @@
 import Live2D from '@/components/canvas/live2d'
-import DisplayMatchAuth from '@/components/display/DisplayMatchAuth'
-import About from '@/components/layout/About'
-import Breakpoint from '@/components/layout/Breakpoint'
-import Container from '@/components/layout/Container'
-import Header from '@/components/layout/Header'
-import Logo from '@/components/layout/Logo'
-import ScrollToTop from '@/components/scroll/ScrollToTop'
-import ToggleLive2D from '@/components/toggle/ToggleLive2D'
-import ToggleTheme from '@/components/toggle/ToggleTheme'
+import { DisplayMatchAuth } from '@/components/display/display-match-auth'
+import { About } from '@/components/layout/about'
+import { Breakpoint } from '@/components/layout/breakpoint'
+import { Container } from '@/components/layout/container'
+import { Header } from '@/components/layout/header'
+import { Logo } from '@/components/layout/logo'
+import { ScrollToTop } from '@/components/scroll/scroll-to-top'
+import { ToggleLive2D } from '@/components/toggle/toggle-live2d'
+import { ToggleTheme } from '@/components/toggle/toggle-theme'
+import { Button } from '@/components/ui/button'
 import { ATTRIBUTE } from '@/lib/constants'
 import { Live2DBreakpoint, Live2DEnable, Live2DProvider } from '@/provider/live2d'
-import { Dashboard } from '@mui/icons-material'
-import { IconButton, Tooltip } from '@mui/joy'
+import { LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -23,14 +23,16 @@ export default function Layout({ children }: React.PropsWithChildren) {
     <Live2DProvider>
       <Header>
         <Container className="flex h-full items-center gap-x-4" variant="header">
-          <Logo />
+          <Link href="/">
+            <Logo />
+          </Link>
           <span aria-hidden="true" className="grow"></span>
           <DisplayMatchAuth role="ADMIN">
-            <Tooltip component={Link} href="/dashboard" title="后台">
-              <IconButton>
-                <Dashboard />
-              </IconButton>
-            </Tooltip>
+            <Button asChild size="icon" variant="outline">
+              <Link href="/dashboard">
+                <LayoutDashboard />
+              </Link>
+            </Button>
             <hr className="s-border-color-divider mx-1 h-4 rounded border" />
           </DisplayMatchAuth>
           <div className="empty:hidden" id={ATTRIBUTE.ID.ISSUES_MOBILE}></div>

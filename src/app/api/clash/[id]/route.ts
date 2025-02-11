@@ -4,13 +4,11 @@ import { CustomResponse } from '@/lib/server/response'
 import { Prisma } from '@prisma/client'
 import { ipAddress } from '@vercel/functions'
 import { NextRequest, NextResponse, userAgent } from 'next/server'
-import { convertClashGetData } from '../../dashboard/clash/utils'
-import { convertVisitorLogSaveData } from '../../dashboard/users/visitor/utils'
 
 const dbGet = async (id: string, data: Prisma.VisitorLogCreateInput) => {
   const subscribeLastAt = new Date().toISOString()
 
-  const clash = await prisma.clash.update({
+  return await prisma.clash.update({
     data: {
       subscribeLastAt,
       visitorInfos: {
@@ -29,8 +27,6 @@ const dbGet = async (id: string, data: Prisma.VisitorLogCreateInput) => {
       enabled: true
     }
   })
-
-  return convertClashGetData(clash)
 }
 
 export const GET = async (request: NextRequest, { params }: DynamicRoute<{ id: string }>) => {
@@ -48,7 +44,7 @@ export const GET = async (request: NextRequest, { params }: DynamicRoute<{ id: s
 
     const agent = userAgent(request)
 
-    const res = await dbGet(id, convertVisitorLogSaveData({ agent, ip }))
+    const res = await dbGet(id, { agent, ip })
 
     const yaml = res.clashTemplateId ? replaceTextWithObjectValues(res.clashTemplates?.content, res.variables) : res.content
 

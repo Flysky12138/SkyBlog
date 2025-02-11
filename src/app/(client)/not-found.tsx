@@ -1,4 +1,4 @@
-import CustomNotFound from '@/components/CustomNotFound'
+import { CustomNotFound } from '@/components/custom-not-found'
 
 export default function NotFound() {
   return <CustomNotFound />

@@ -1,17 +1,17 @@
-import { accordion } from './Accordion'
-import hr from './Divider'
-import images from './Images'
-import masonry from './Masonry'
-import mdx from './Mdx'
-import modal from './Modal'
-import tabs from './Tabs'
+import { accordion } from './accordion'
+import { Divider } from './divider'
+import { Images } from './images'
+import { Masonry } from './masonry'
+import { Mdx } from './mdx'
+import { Modal } from './modal'
+import { Tabs } from './tabs'
 
 export const directive = {
-  hr,
-  images,
-  masonry,
-  mdx,
-  modal,
-  tabs,
+  hr: Divider,
+  images: Images,
+  masonry: Masonry,
+  mdx: Mdx,
+  modal: Modal,
+  tabs: Tabs,
   ...accordion
 }

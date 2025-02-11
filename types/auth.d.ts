@@ -1,9 +1,10 @@
+import { Role } from '@prisma/client'
 import 'next-auth/jwt'
 import { GitHubProfile } from 'next-auth/providers/github'
 
 export interface Auth {
   id: string
-  role: 'USER' | 'ADMIN'
+  role: Role
 }
 
 declare module 'next-auth/jwt' {

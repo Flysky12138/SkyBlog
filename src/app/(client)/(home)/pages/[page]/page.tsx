@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma'
-import PostList, { getPosts, POST_WHERE_INPUT } from '../../_components/PostList'
+import { getPosts, POST_WHERE_INPUT, PostList } from '../../_components/post/post-list'
 
 interface PageProps extends DynamicRoute<{ page: string }> {}
 
@@ -20,7 +20,7 @@ export default async function Page({ params }: PageProps) {
 
   const pageNumber = Number.parseInt(page)
 
-  const posts = await getPosts(pageNumber, POST_WHERE_INPUT)
+  const { result: posts, ...pagination } = await getPosts(pageNumber)
 
-  return <PostList page={pageNumber} path="/pages/[page]" posts={posts} />
+  return <PostList path="/pages/[page]" posts={posts} {...pagination} />
 }

@@ -1,99 +1,113 @@
 'use client'
 
-import ModalDelete from '@/components/modal/ModalDelete'
 import { Table } from '@/components/table'
-import TableStatus from '@/components/table/TableStatus'
+import { Button } from '@/components/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Switch } from '@/components/ui/switch'
 import { CustomRequest } from '@/lib/server/request'
 import { Toast } from '@/lib/toast'
-import { Button, Switch } from '@mui/joy'
 import { produce } from 'immer'
+import { Ellipsis } from 'lucide-react'
 import Link from 'next/link'
 import useSWR from 'swr'
+import { useImmer } from 'use-immer'
 
 export default function Page() {
-  const {
-    data: posts,
-    isLoading,
-    mutate: setPosts
-  } = useSWR('/api/dashboard/posts', () => CustomRequest('GET api/dashboard/posts', {}), {
-    fallbackData: []
+  const [search, setSearch] = useImmer<ApiMap['GET api/dashboard/posts']['search']>({ limit: 10, page: 1 })
+
+  const { data, isLoading, mutate } = useSWR(['6a75f4b6-326d-5aa8-b53c-e5af8d86dec2', search], () => {
+    return CustomRequest('GET api/dashboard/posts', { search })
   })
 
   return (
-    <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.Head className="w-10">#</Table.Head>
-          <Table.Head className="w-52">标题</Table.Head>
-          <Table.Head className="w-80">描述</Table.Head>
-          <Table.Head className="w-40">分类</Table.Head>
-          <Table.Head className="w-40">标签</Table.Head>
-          <Table.Head className="w-16">公开</Table.Head>
-          <Table.Head className="w-44"></Table.Head>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {posts.map((post, index) => (
-          <Table.Row key={post.id}>
-            <Table.Cell>{index + 1}</Table.Cell>
-            <Table.Cell>{post.title}</Table.Cell>
-            <Table.Cell>
-              <p className="truncate">{post.description}</p>
-            </Table.Cell>
-            <Table.Cell>{post.categories.map(category => category.name).join('、')}</Table.Cell>
-            <Table.Cell>{post.tags.map(tag => tag.name).join('、')}</Table.Cell>
-            <Table.Cell className="align-bottom">
-              <Switch
-                checked={post.published}
-                color={post.published ? 'success' : 'warning'}
-                onChange={async () => {
-                  const data = await Toast(
-                    CustomRequest('PATCH api/dashboard/posts/[id]', {
-                      body: { published: !post.published },
-                      params: { id: post.id }
-                    }),
-                    {
-                      success: '更新成功'
-                    }
-                  )
-                  setPosts(
-                    produce(state => {
-                      state.splice(index, 1, data)
+    <Table
+      columns={[
+        { key: 'index' },
+        { dataIndex: 'title', title: '标题' },
+        { dataIndex: 'description', title: '描述' },
+        { dataIndex: 'categories', render: value => value.map(category => category.name).join('、'), title: '分类' },
+        { dataIndex: 'tags', render: value => value.map(category => category.name).join('、'), title: '标签' },
+        {
+          dataIndex: 'published',
+          render: (text, record, index) => (
+            <Switch
+              checked={text}
+              onCheckedChange={async () => {
+                const data = await Toast(
+                  CustomRequest('PATCH api/dashboard/posts/[id]', {
+                    body: { published: !text },
+                    params: { id: record.id }
+                  }),
+                  {
+                    success: '更新成功'
+                  }
+                )
+                mutate(
+                  produce(state => {
+                    state.result.splice(index, 1, data)
+                  }),
+                  {
+                    revalidate: false
+                  }
+                )
+              }}
+            />
+          ),
+          title: '公开'
+        },
+        {
+          align: 'right',
+          headerClassName: 'w-20',
+          key: 'edit',
+          render: (record, index) => (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="outline">
+                  <Ellipsis />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link className="cursor-pointer" href={`/posts/${record.id}`} target="_blank">
+                    预览
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link className="cursor-pointer" href={`/dashboard/posts/${record.id}`}>
+                    编辑
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="cursor-pointer !text-destructive"
+                  onClick={async () => {
+                    await Toast(CustomRequest('DELETE api/dashboard/posts/[id]', { params: { id: record.id } }), {
+                      success: '删除成功'
                     })
-                  )
-                }}
-              />
-            </Table.Cell>
-            <Table.Cell className="text-end">
-              <ModalDelete
-                component={props => (
-                  <Button color="danger" size="sm" variant="plain" {...props}>
-                    删除
-                  </Button>
-                )}
-                description={post.title}
-                onSubmit={async () => {
-                  await Toast(CustomRequest('DELETE api/dashboard/posts/[id]', { params: { id: post.id } }), {
-                    success: '删除成功'
-                  })
-                  setPosts(
-                    produce(state => {
-                      state.splice(index, 1)
-                    })
-                  )
-                }}
-              />
-              <Button color="warning" component="a" href={`/posts/${post.id}`} size="sm" target="_blank" variant="plain">
-                查看
-              </Button>
-              <Button component={Link} href={`/dashboard/posts/${post.id}`} size="sm" variant="plain">
-                编辑
-              </Button>
-            </Table.Cell>
-          </Table.Row>
-        ))}
-        <TableStatus colSpan={7} isEmpty={posts.length == 0} isLoading={isLoading} />
-      </Table.Body>
-    </Table>
+                    mutate(
+                      produce(state => {
+                        state.result.splice(index, 1)
+                      }),
+                      {
+                        revalidate: data!.result.length == 1
+                      }
+                    )
+                  }}
+                >
+                  删除
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ),
+          title: '操作'
+        }
+      ]}
+      dataSource={data?.result}
+      loading={isLoading}
+      pagination={{
+        ...data,
+        onChange: setSearch
+      }}
+    />
   )
 }

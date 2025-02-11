@@ -1,18 +1,18 @@
-import DisplayMatchAuth from '@/components/display/DisplayMatchAuth'
-import Card from '@/components/layout/Card'
+import { DisplayMatchAuth } from '@/components/display/display-match-auth'
+import { Card } from '@/components/layout/card'
 import { MDXServer } from '@/components/mdx/server'
 import { MDXToc } from '@/components/mdx/toc'
 import { cn } from '@/lib/cn'
 import { ATTRIBUTE } from '@/lib/constants'
 import prisma from '@/lib/prisma'
-import { Edit } from '@mui/icons-material'
-import { IconButton, Tooltip, Typography } from '@mui/joy'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import PostInfo from './_components/PostInfo'
+import { PostInfo } from './_components/post-info'
 // import PostIssues from './_components/PostIssues'
-import PostTocWrapper from './_components/PostTocWrapper'
+import { Button } from '@/components/ui/button'
+import { PencilLine } from 'lucide-react'
+import { PostTocWrapper } from './_components/post-toc-wrapper'
 
 const getPost = async (id: string) => {
   return await prisma.post.findUnique({
@@ -52,18 +52,14 @@ export default async function Page({ params }: PageProps) {
       {post.showTitleCard && (
         <Card className="relative flex flex-col gap-y-2 p-5">
           <DisplayMatchAuth role="ADMIN">
-            <Tooltip title="编辑">
-              <IconButton className="absolute right-5 top-5" variant="plain">
-                <Link href={`/dashboard/posts/${post.id}`} target="_blank">
-                  <Edit />
-                </Link>
-              </IconButton>
-            </Tooltip>
+            <Button asChild className="absolute right-5 top-5" size="icon" variant="ghost">
+              <Link href={`/dashboard/posts/${post.id}`} target="_blank">
+                <PencilLine />
+              </Link>
+            </Button>
           </DisplayMatchAuth>
-          <Typography className="font-title font-normal" component="h1" level="h2">
-            {post.title}
-          </Typography>
-          {post.description && <Typography level="body-md">{post.description}</Typography>}
+          <p className="font-title text-3xl font-normal">{post.title}</p>
+          {post.description && <p className="text-secondary-foreground/80">{post.description}</p>}
           <PostInfo
             defaultValue={{
               categories: post.categories,

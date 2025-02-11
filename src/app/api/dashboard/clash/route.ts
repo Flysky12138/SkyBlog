@@ -2,8 +2,6 @@ import prisma from '@/lib/prisma'
 import { CustomResponse } from '@/lib/server/response'
 import { Prisma } from '@prisma/client'
 import { NextRequest } from 'next/server'
-import { convertVisitorLogGetData } from '../users/visitor/utils'
-import { convertClashGetData, convertClashSaveData } from './utils'
 
 const include = Prisma.validator<Prisma.ClashInclude>()({
   visitorInfos: {
@@ -14,16 +12,10 @@ const include = Prisma.validator<Prisma.ClashInclude>()({
 })
 
 const dbGet = async () => {
-  const data = await prisma.clash.findMany({
+  return await prisma.clash.findMany({
     include,
     orderBy: { createdAt: 'desc' }
   })
-  return data.map(({ visitorInfos, ...it }) =>
-    convertClashGetData({
-      ...it,
-      visitorInfos: visitorInfos.map(convertVisitorLogGetData)
-    })
-  )
 }
 
 export type GET = MethodRouteType<{
@@ -40,12 +32,7 @@ export const GET = async () => {
 }
 
 const dbPost = async (data: POST['body']) => {
-  return convertClashGetData(
-    await prisma.clash.create({
-      include,
-      data: convertClashSaveData(data)
-    })
-  )
+  return await prisma.clash.create({ data, include })
 }
 
 export type POST = MethodRouteType<{
@@ -67,16 +54,14 @@ export const POST = async (request: NextRequest) => {
 }
 
 const dbPut = async (id: string, data: PUT['body']) => {
-  return convertClashGetData(
-    await prisma.clash.update({
-      include,
-      data: {
-        ...convertClashSaveData(data),
-        updatedAt: new Date().toISOString()
-      },
-      where: { id }
-    })
-  )
+  return await prisma.clash.update({
+    include,
+    data: {
+      ...data,
+      updatedAt: new Date().toISOString()
+    },
+    where: { id }
+  })
 }
 
 export type PUT = MethodRouteType<{
@@ -134,7 +119,7 @@ export const PATCH = async (request: NextRequest) => {
 }
 
 const dbDelete = async (id: string) => {
-  return convertClashGetData(await prisma.clash.delete({ include, where: { id } }))
+  return await prisma.clash.delete({ include, where: { id } })
 }
 
 export type DELETE = MethodRouteType<{

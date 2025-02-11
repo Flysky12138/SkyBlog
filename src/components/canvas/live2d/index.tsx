@@ -1,6 +1,6 @@
 'use client'
 
-import useLive2D from '@/hooks/useLive2D'
+import { useLive2D } from '@/hooks/use-live2d'
 import { cn } from '@/lib/cn'
 import { useLive2DContext } from '@/provider/live2d'
 import { delay } from 'es-toolkit'

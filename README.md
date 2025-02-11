@@ -6,6 +6,19 @@
 - [Vercel Edge Config](https://vercel.com/docs/storage/edge-config): 存储一些配置文件，如：Live2D直链等
 - [Cloudflare R2](https://www.cloudflare.com/zh-cn/developer-platform/r2/): 存储文件
 
+  Cloudflare R2 CORS 策略
+
+  ```js
+  ;[
+    {
+      AllowedOrigins: ['http://localhost:3000', 'https://blog.flysky.xyz'],
+      AllowedMethods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'],
+      AllowedHeaders: ['*'],
+      ExposeHeaders: ['*']
+    }
+  ]
+  ```
+
 ## 环境变量
 
 以下是不适合公开的环境变量，示例为随机生成格式相同的字符串

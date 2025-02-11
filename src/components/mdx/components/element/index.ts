@@ -1,13 +1,13 @@
-import a from './A'
-import code from './Code'
-import * as heading from './Heading'
-import img from './Img'
-import pre from './Pre'
+import { A } from './a'
+import { Code } from './code'
+import * as heading from './heading'
+import { Img } from './img'
+import { Pre } from './pre'
 
 export const element = {
-  a,
-  code,
+  a: A,
+  code: Code,
   ...heading,
-  img,
-  pre
+  img: Img,
+  pre: Pre
 }

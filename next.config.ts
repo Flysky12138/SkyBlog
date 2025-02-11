@@ -6,14 +6,15 @@ import { serializeOptions } from './src/components/mdx/options'
  * 内容安全策略 (CSP)
  * https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
  */
-const cspSrc = [process.env.NEXT_PUBLIC_R2_URL, process.env.NEXT_PUBLIC_S3_API.replace('//', `//${process.env.NEXT_PUBLIC_R2_BUCKET_NAME}.`)].join(' ')
+const cspSrc = [process.env.NEXT_PUBLIC_R2_URL, process.env.NEXT_PUBLIC_S3_API.replace('//', `//${process.env.NEXT_PUBLIC_R2_BUCKET_NAME}.`)].join(
+  ' '
+)
 const cspHeader = [
   "default-src 'self'",
   `img-src 'self' blob: data: ${cspSrc}`,
   `connect-src 'self' blob: data: ${cspSrc}`,
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
-  'worker-src blob:',
   "object-src 'none'",
   "frame-ancestors 'none'",
   'block-all-mixed-content'
@@ -45,12 +46,10 @@ const headers: NextConfig['headers'] = async () => [
 
 const images: NextConfig['images'] = {
   remotePatterns: [{ hostname: 'raw.githubusercontent.com', protocol: 'https' as const }].concat(
-    [process.env.NEXT_PUBLIC_WEBSITE_URL, process.env.NEXT_PUBLIC_R2_URL]
-      .filter(it => it)
-      .map(it => ({
-        hostname: new URL(it).hostname,
-        protocol: new URL(it).protocol.slice(0, -1) as 'https'
-      }))
+    [process.env.NEXT_PUBLIC_WEBSITE_URL, process.env.NEXT_PUBLIC_R2_URL].filter(Boolean).map(it => ({
+      hostname: new URL(it).hostname,
+      protocol: new URL(it).protocol.slice(0, -1) as 'https'
+    }))
   )
 }
 

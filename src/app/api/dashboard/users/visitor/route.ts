@@ -3,10 +3,9 @@ import { CustomResponse } from '@/lib/server/response'
 import { Prisma, VisitorLog } from '@prisma/client'
 import { NextRequest } from 'next/server'
 import { PaginationArgs } from 'prisma-paginate'
-import { convertVisitorLogGetData } from './utils'
 
 const dbGet = async (payload: GET['search']) => {
-  const { result, totalPages, ...data } = await prisma.visitorLog.paginate(
+  return await prisma.visitorLog.paginate(
     {
       orderBy: {
         createdAt: 'desc'
@@ -14,11 +13,6 @@ const dbGet = async (payload: GET['search']) => {
     },
     payload
   )
-  return {
-    ...data,
-    totalPages,
-    result: result.map(convertVisitorLogGetData)
-  }
 }
 
 export type GET = MethodRouteType<{

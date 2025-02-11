@@ -1,6 +1,6 @@
 'use client'
 
-import useTheme from '@/hooks/useTheme'
+import { useTheme } from '@/hooks/use-theme'
 import { cn } from '@/lib/cn'
 import { DiffEditor, DiffEditorProps, Editor, EditorProps, loader, Monaco, OnMount } from '@monaco-editor/react'
 import { AutoAwesome, Code, CodeOff, ZoomInMap, ZoomOutMap } from '@mui/icons-material'
@@ -9,11 +9,13 @@ import { toMerged } from 'es-toolkit'
 import { editor, IDisposable } from 'monaco-editor'
 import React from 'react'
 import { useMeasure, useToggle } from 'react-use'
-import Card from '../layout/Card'
+import { Card } from '../layout/card'
 import './index.css'
 
 const Space: React.FC<{ className?: string }> = ({ className }) => <span aria-hidden="true" className={cn('shrink grow', className)}></span>
-const Divider: React.FC<{ className?: string }> = ({ className }) => <hr className={cn('s-border-color-divider mx-2 h-4 rounded border', className)} />
+const Divider: React.FC<{ className?: string }> = ({ className }) => (
+  <hr className={cn('s-border-color-divider mx-2 h-4 rounded border', className)} />
+)
 
 loader.config({
   paths: {
@@ -48,7 +50,9 @@ export type LanguagePropsType = Required<Pick<EditorProps, 'language'>> & {
   /** 注册事件 */
   registerEvents?: (monaco: Monaco) => IDisposable[]
 }
-interface MonacoEditorProps extends LanguagePropsType, Pick<EditorProps, 'loading' | 'beforeMount' | 'className' | 'height' | 'onChange' | 'options'> {
+interface MonacoEditorProps
+  extends LanguagePropsType,
+    Pick<EditorProps, 'loading' | 'beforeMount' | 'className' | 'height' | 'onChange' | 'options'> {
   code: EditorProps['value']
   oldCode: DiffEditorProps['original']
   ref?: React.Ref<MonacoEditorRef>
@@ -142,7 +146,7 @@ export default function MonacoEditor({
           if (event.key == 's' && (event.ctrlKey || event.metaKey)) event.preventDefault()
         }}
       >
-        <div ref={cardToolbarRef} className="s-bg-title s-border-color-card flex h-header items-center gap-3 overflow-auto border-b px-3.5">
+        <div ref={cardToolbarRef} className="s-bg-title flex h-header items-center gap-3 overflow-auto border-b px-3.5">
           <p className="s-subtitle select-none font-title text-xl">{props.language}</p>
           {toolbarRender?.({ Divider, Space, diffMode, mounted, zoomIn })}
           <Tooltip title="格式调整">

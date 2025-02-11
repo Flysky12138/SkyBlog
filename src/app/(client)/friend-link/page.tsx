@@ -1,4 +1,4 @@
-import Card from '@/components/layout/Card'
+import { Card } from '@/components/layout/card'
 import prisma from '@/lib/prisma'
 import Image from 'next/image'
 import Link from 'next/link'

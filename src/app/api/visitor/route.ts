@@ -3,7 +3,6 @@ import { CustomResponse } from '@/lib/server/response'
 import { Prisma } from '@prisma/client'
 import { Geo } from '@vercel/functions'
 import { NextRequest, userAgent } from 'next/server'
-import { convertVisitorLogSaveData } from '../dashboard/users/visitor/utils'
 
 export const runtime = 'nodejs'
 
@@ -24,7 +23,7 @@ export const POST = async (request: NextRequest) => {
   try {
     const data: POST['body'] = await request.json()
 
-    await dbPost(convertVisitorLogSaveData(data))
+    await dbPost(data)
 
     return new Response()
   } catch (error) {

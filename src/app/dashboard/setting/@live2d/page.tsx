@@ -1,6 +1,6 @@
 'use client'
 
-import Card from '@/components/layout/Card'
+import { Card } from '@/components/layout/card'
 import { CustomRequest } from '@/lib/server/request'
 import { Toast } from '@/lib/toast'
 import { Button, Input } from '@mui/joy'

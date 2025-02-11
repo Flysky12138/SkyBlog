@@ -1,6 +1,6 @@
 'use client'
 
-import Card from '@/components/layout/Card'
+import { Card } from '@/components/layout/card'
 import { Button } from '@mui/joy'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'

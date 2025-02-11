@@ -1,20 +1,22 @@
 'use client'
 
-import ModalCore from '@/components/modal/ModalCore'
+import { ModalCore } from '@/components/modal/modal-core'
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { download } from '@/lib/file/download'
-import { Button, FormControl, FormLabel, Option, Radio, RadioGroup, Select } from '@mui/joy'
 import { Alert } from '@mui/material'
+import { Download, Loader2, X } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 import { useMeasure, useScrollbarWidth } from 'react-use'
 import { FixedSizeList } from 'react-window'
 import { useImmer } from 'use-immer'
-import Arctan from './Arctan.mdx'
-import Chudnovsky from './Chudnovsky.mdx'
-import ChudnovskyBs from './ChudnovskyBs.mdx'
-import ChudnovskyBsCode from './ChudnovskyBsCode.mdx'
-import ChudnovskyCode from './ChudnovskyCode.mdx'
-import Label from './Label.mdx'
+import Arctan from './arctan.mdx'
+import ChudnovskyBsCode from './chudnovsky-bs-code.mdx'
+import ChudnovskyBs from './chudnovsky-bs.mdx'
+import ChudnovskyCode from './chudnovsky-code.mdx'
+import Chudnovsky from './chudnovsky.mdx'
+import Label from './label.mdx'
 
 type ModeType = 'arctan' | 'chudnovsky' | 'chudnovsky-bs'
 
@@ -61,60 +63,55 @@ export default function Pi() {
 
   return (
     <section ref={sectionRef} className="flex flex-col gap-y-3">
-      <FormControl>
-        <FormLabel>1、算法</FormLabel>
-        <RadioGroup
-          className="flex-wrap gap-x-5 gap-y-3 space-x-0"
-          orientation="horizontal"
-          sx={{
-            label: {
-              '& p': {
-                m: 0
-              }
-            }
-          }}
-          value={form.mode}
-          onChange={event => {
+      <div className="flex gap-4">
+        <Select
+          defaultValue={form.mode}
+          onValueChange={(mode: ModeType) => {
             setForm(state => {
-              const mode = event.target.value as ModeType
               state.mode = mode
-              if (!OPTIONS[mode].includes(state.size)) state.size = Math.min(...OPTIONS[mode])
+              if (!OPTIONS[mode].includes(state.size)) {
+                state.size = Math.min(...OPTIONS[mode])
+              }
             })
           }}
         >
-          <Radio label={<Label />} value="arctan" />
-          <Radio label="Chudnovsky" value="chudnovsky" />
-          <Radio label="Chudnovsky - BS" value="chudnovsky-bs" />
-        </RadioGroup>
-      </FormControl>
-      <FormControl className="h-20">
-        <FormLabel>2、计算位数</FormLabel>
-        {form.mode == 'arctan' ? (
-          <Alert className="mt-2 py-px" severity="warning">
-            收敛速度太慢，不提供计算
-          </Alert>
-        ) : (
-          <div className="mt-2 flex gap-x-6">
+          <SelectTrigger className="w-44">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="arctan">
+              <Label />
+            </SelectItem>
+            <SelectItem value="chudnovsky">Chudnovsky</SelectItem>
+            <SelectItem value="chudnovsky-bs">Chudnovsky - BS</SelectItem>
+          </SelectContent>
+        </Select>
+        {form.mode != 'arctan' && (
+          <>
             <Select
-              className="w-20"
-              value={form.size}
-              onChange={(_, value) => {
+              defaultValue={String(form.size)}
+              onValueChange={value => {
                 if (!value) return
                 setForm(state => {
-                  state.size = value
+                  state.size = Number(value)
                 })
               }}
             >
-              {OPTIONS[form.mode].map(option => (
-                <Option key={option} value={option}>
-                  {option.toExponential().replace('+', '')}
-                </Option>
-              ))}
+              <SelectTrigger className="w-20">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {OPTIONS[form.mode].map(option => (
+                  <SelectItem key={option} value={String(option)}>
+                    {option.toExponential().replace('+', '')}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
             <ModalCore
               className="s-bg-root p-0 [&_figure]:s-hidden-scrollbar [&_figure]:overflow-auto [&_pre]:bg-transparent"
               component={props => (
-                <Button variant="soft" {...props}>
+                <Button variant="outline" {...props}>
                   源码
                 </Button>
               )}
@@ -124,18 +121,24 @@ export default function Pi() {
             </ModalCore>
             <Button
               className="grow"
-              loading={loading}
+              disabled={loading}
               onClick={() => {
                 setResult(null)
                 workerRef.current?.postMessage(form)
                 setLoading(true)
               }}
             >
+              {loading && <Loader2 className="animate-spin" />}
               计算
             </Button>
-          </div>
+          </>
         )}
-      </FormControl>
+      </div>
+      {form.mode == 'arctan' && (
+        <Alert className="mt-2 py-px" severity="warning">
+          收敛速度太慢，不提供计算
+        </Alert>
+      )}
       <span ref={fontRef} aria-hidden="true" className="invisible absolute h-0 self-start font-code">
         3
       </span>
@@ -143,22 +146,22 @@ export default function Pi() {
         result.error ? (
           <Alert severity="error">{result.error.message}</Alert>
         ) : (
-          <div className="mb-5">
-            <div className="pb-1">
-              耗时 {result.time} 毫秒；
+          <>
+            <div className="flex items-center justify-end gap-x-2">
+              耗时 {result.time > 1000 ? `${(result.time / 1000).toFixed(3)} 秒` : `${result.time.toFixed(1)} 毫秒`}
               <Button
-                className="text-base"
+                className="text-sm"
                 size="sm"
-                sx={{
-                  '--Button-minHeight': '0'
-                }}
-                variant="plain"
+                variant="secondary"
                 onClick={() => {
                   const blob = new Blob([piStr.join('')], { type: 'text/plain;charset=utf-8' })
                   download(blob, `pi-${form.size}.txt`)
                 }}
               >
-                下载
+                <Download /> 下载
+              </Button>
+              <Button className="text-sm" size="sm" variant="secondary" onClick={() => setResult(null)}>
+                <X /> 关闭
               </Button>
             </div>
             <div className="s-bg-sheet s-border-color-card overflow-hidden rounded-lg border py-2 pl-3 font-code">
@@ -170,7 +173,7 @@ export default function Pi() {
                 )}
               </FixedSizeList>
             </div>
-          </div>
+          </>
         )
       ) : null}
       <div>

@@ -1,7 +1,6 @@
 'use client'
 
-import { GET } from '@/app/api/dashboard/posts/[id]/route'
-import UploadFiles from '@/app/dashboard/r2/[[...slug]]/_components/UploadFiles'
+import { UploadFiles } from '@/app/dashboard/r2/[[...slug]]/_components/upload-files'
 import { MDXClient } from '@/components/mdx/client'
 import MonacoEditor from '@/components/monaco-editor'
 import { markdownConfig } from '@/components/monaco-editor/language/markdown'
@@ -16,11 +15,11 @@ import { useAsync, useDebounce, useEvent, useWindowSize } from 'react-use'
 import { toast } from 'sonner'
 import { useImmer } from 'use-immer'
 import { uuidv7 } from 'uuidv7'
-import ModelDetail from './_components/ModelDetail'
+import { ModelDetail } from './_components/model-detail'
 
-export type DefaultPostType = NonNullable<GET['return']>
-export interface MessageEventDataRefreshType extends MessageEventDataType<'post-refresh', DefaultPostType> {}
-export interface MessageEventDataMountedType extends MessageEventDataType<'post-preview-mounted'> {}
+export type DefaultPostType = NonNullable<ApiMap['GET api/dashboard/posts/[id]']['return']>
+export interface MessageEventDataRefreshType extends MessageEventData<'post-refresh', DefaultPostType> {}
+export interface MessageEventDataMountedType extends MessageEventData<'post-preview-mounted'> {}
 
 const defaultPost: DefaultPostType = {
   authorId: '',
